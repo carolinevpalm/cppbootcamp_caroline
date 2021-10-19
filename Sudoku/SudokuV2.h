@@ -31,6 +31,11 @@ void removeAndUpdatePeers(Cell (&sudoku)[9][9], int i, int j);
 void removeFromColPeers(Cell (&sudoku)[9][9], int i, int j);
 void removeFromRowPeers(Cell (&sudoku)[9][9], int i, int j);
 void removeFromBoxPeers(Cell (&sudoku)[9][9], int i, int j);
+void checkUniqueRow(Cell (&sudoku)[9][9], int i, int j, int checkVal);
+void checkUniqueCol(Cell (&sudoku)[9][9], int i, int j, int checkVal);
+void checkUniqueBox(Cell (&sudoku)[9][9], int i, int j, int checkVal);
+
+
 
 
 
