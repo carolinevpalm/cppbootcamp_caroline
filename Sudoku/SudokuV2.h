@@ -5,6 +5,7 @@
 #include <vector>
 #include <fstream>
 #include <algorithm>
+#include <chrono>
 
 /*typedef struct cell { //Gör om till Class?
     int val;

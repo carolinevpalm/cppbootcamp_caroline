@@ -136,9 +136,6 @@ void printSudokuPossibility(Cell sudoku[9][9]){
 }
 
 int main(){
-
-    // Initialize grid with all possibilities and 0 values according to constructor in class
-    Cell grid[9][9];
         
     // Enter file to solve here:
     std::string filename;
@@ -147,8 +144,14 @@ int main(){
     //std::ifstream sudokufile ("EasySudoku.txt");
     std::ifstream sudokufile (filename);
 
+    //Start execution timer
+    auto begin = std::chrono::high_resolution_clock::now();
+
     // Read input file into array
     if (sudokufile.is_open()){
+
+        // Initialize grid with all possibilities and 0 values according to constructor in class
+        Cell grid[9][9];
 
         // Fill sudoku array with elements from text file
         for(int i{}; i !=9; ++i){
@@ -193,7 +196,6 @@ int main(){
                     for(int x=0; x<grid[i][j].poss.size(); x++){
                         int checkVal = grid[i][j].poss.at(x);
                         checkUniqueCol(grid, i, j, checkVal);
-
                     }
                 }
             }
@@ -205,7 +207,6 @@ int main(){
                     for(int x=0; x<grid[i][j].poss.size(); x++){
                         int checkVal = grid[i][j].poss.at(x);
                         checkUniqueBox(grid, i, j, checkVal);
-
                     }
                 }
             }
@@ -214,11 +215,15 @@ int main(){
         std::cout<< "This is the solution:" << std::endl;
         printSudoku(grid);
         //Uncomment if you want to see possible solutions in grid
-        std::cout<< "Here are all possible solutions:" << std::endl;
-        printSudokuPossibility(grid);
+        /*std::cout<< "Here are all possible solutions:" << std::endl;
+        printSudokuPossibility(grid);*/
 
     }
     else {std::cout << "Can't open the file" << std::endl;}
+
+    auto end = std::chrono::high_resolution_clock::now();
+    auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(end-begin);
+    std::cout<<"Time of execution: " << elapsed.count() << " micro seconds" << std::endl;
 
 }
 
