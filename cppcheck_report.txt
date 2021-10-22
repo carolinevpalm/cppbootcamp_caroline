@@ -61,5 +61,44 @@ w1d5/shapes.h:43:5: style: Class 'Square' has a constructor with 1 argument that
 w2d5/1.cpp:31:14: error: Deallocation of an auto-variable results in undefined behaviour. [autovarInvalidDeallocation]
     delete[] a; //delete pointer from fillArray since we are done with it now
              ^
+w3d3/shapes.h:11:10: style:inconclusive: Technically the member function 'Shape::print' can be const. [functionConst]
+    void print() {
+         ^
+w3d3/shapes.h:14:10: style:inconclusive: Technically the member function 'Shape::operator<' can be const. [functionConst]
+    bool operator <(const Shape &s); // Operator overload
+         ^
+w3d3/Assignment1.cpp:9:13: note: Technically the member function 'Shape::operator<' can be const.
+bool Shape::operator<(const Shape &s){
+            ^
+w3d3/shapes.h:14:10: note: Technically the member function 'Shape::operator<' can be const.
+    bool operator <(const Shape &s); // Operator overload
+         ^
+w3d3/shapes.h:15:10: style:inconclusive: Technically the member function 'Shape::operator>' can be const. [functionConst]
+    bool operator >(const Shape &s);
+         ^
+w3d3/Assignment1.cpp:18:13: note: Technically the member function 'Shape::operator>' can be const.
+bool Shape::operator>(const Shape &s){
+            ^
+w3d3/shapes.h:15:10: note: Technically the member function 'Shape::operator>' can be const.
+    bool operator >(const Shape &s);
+         ^
+w3d3/shapes.h:16:10: style:inconclusive: Technically the member function 'Shape::operator==' can be const. [functionConst]
+    bool operator ==(const Shape &s);
+         ^
+w3d3/Assignment1.cpp:27:13: note: Technically the member function 'Shape::operator==' can be const.
+bool Shape::operator==(const Shape &s){
+            ^
+w3d3/shapes.h:16:10: note: Technically the member function 'Shape::operator==' can be const.
+    bool operator ==(const Shape &s);
+         ^
+w3d3/shapes.h:25:5: style: Class 'Circle' has a constructor with 1 argument that is not explicit. [noExplicitConstructor]
+    Circle(const int &radius):Shape((2*3*radius),(3*radius*radius)){}
+    ^
+w3d3/shapes.h:43:5: style: Class 'Square' has a constructor with 1 argument that is not explicit. [noExplicitConstructor]
+    Square(const int width):Shape((4*width),(width*width)){}
+    ^
+Sudoku/SudokuV2.cpp:120:0: style: The function 'printSudokuPossibility' is never used. [unusedFunction]
+
+^
 nofile:0:0: information: Cppcheck cannot find all the include files (use --check-config for details) [missingIncludeSystem]
 
