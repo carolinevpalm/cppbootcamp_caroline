@@ -16,7 +16,6 @@
 }*/
 
 void assignValue(Cell (&sudoku)[9][9], int i, int j){
-    int value = sudoku[i][j].poss[0];
     sudoku[i][j].val = sudoku[i][j].poss[0];
     sudoku[i][j].poss.clear();
     removeAndUpdatePeers(sudoku, i, j);
