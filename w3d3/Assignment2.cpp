@@ -7,11 +7,11 @@
 
 int main(){
 
-    int maxVal = 34;
-    std::map<int, int> duplicates;
+    const int maxVal = 33;
+    std::map<int, int> duplicates; //För att sortera med värde istället kan man använda multimap som tillåter duplicate keys --> key blir number of occurance
 
     for(int i = 0; i < 10000; i++){
-        int randnr = rand() % maxVal;
+        int randnr = rand() % (maxVal+1);
         //int startVal = 1;
         duplicates[randnr]++;
     

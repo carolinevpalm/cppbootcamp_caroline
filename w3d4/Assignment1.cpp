@@ -19,6 +19,36 @@ int main(){
     std::cout << (bits&maskDoors).count() << " doors are open" << std::endl;
     std::cout << (bits&maskLights).count() << " lights are on" << std::endl;
 
+    for(int i = 11; i<16; i++){
+        if ((bits&maskSeatbelt)[i]){
+            std::cout << "Seatbelt " << i-10 << " is used."<<std::endl;
+        }
+        else {std::cout << "Seatbelt " << i-10 << " is unused."<<std::endl;}
+    }
+
+    for(int i = 7; i<11; i++){
+        if ((bits&maskWindows)[i]){
+            std::cout << "Window " << i-6 << " is open."<<std::endl;
+        }
+        else {std::cout << "Window " << i-6 << " is closed."<<std::endl;}
+    }
+
+    for(int i = 3; i<7; i++){
+        if ((bits&maskDoors)[i]){
+            std::cout << "Door " << i-2 << " is open."<<std::endl;
+        }
+        else {std::cout << "Door " << i-2 << " is closed."<<std::endl;}
+    }
+
+    for(int i = 0; i<3; i++){
+        if ((bits&maskLights)[i]){
+            std::cout << "Light " << i+1 << " is on."<<std::endl;
+        }
+        else {std::cout << "Light " << i+1 << " is off."<<std::endl;}
+    }
+
+   
+
 
 
 

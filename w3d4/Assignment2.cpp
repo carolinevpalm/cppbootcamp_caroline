@@ -43,11 +43,11 @@ void function(uint16_t speed, uint16_t front, uint16_t rear, uint16_t right, uin
     std::bitset<16> rightbits(threeBit(right)<<3);
     std::bitset<16> leftbits(threeBit(left));
 
-    std::cout << speedbits<<std::endl;
-    std::cout << frontbits<<std::endl;
-    std::cout << rearbits<<std::endl;
-    std::cout << rightbits<<std::endl;
-    std::cout << leftbits<<std::endl;
+    //std::cout << speedbits<<std::endl;
+    //std::cout << frontbits<<std::endl;
+    //std::cout << rearbits<<std::endl;
+    //std::cout << rightbits<<std::endl;
+    //std::cout << leftbits<<std::endl;
     
     std::cout << std::bitset<16> (speedbits|frontbits|rearbits|rightbits|leftbits)<<std::endl;
 
@@ -59,8 +59,6 @@ int main(){
     uint16_t rear = 400;
     uint16_t right = 150;
     uint16_t left = 1500;
-    //std::bitset<16> speedbits((speed/20)<<12);
-    //std::cout<<speedbits<<std::endl;
 
     function(speed,front,rear,right,left);
 

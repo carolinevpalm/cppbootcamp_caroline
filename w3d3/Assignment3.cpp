@@ -5,9 +5,12 @@
 
 #include <iostream>
 #include <set>
+#include <cstdlib>
+#include <ctime>
+
 
 int main(){
-
+    std::srand(time(nullptr));
     std::multiset <int> randNr;
     for(int i = 0; i<1024; i++){
         randNr.insert(rand());
@@ -16,7 +19,7 @@ int main(){
     int compareNr = rand();
     std::cout << "Compare number is: " << compareNr << std::endl;
     
-    auto uppr = randNr.upper_bound(compareNr);
+    auto uppr = randNr.upper_bound(compareNr); //upper bound searches 10 times (binary search)
     int upprVal = *uppr;
     auto lowr = --uppr;
     int lowrVal = *lowr;
