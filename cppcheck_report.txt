@@ -1,0 +1,65 @@
+Sudoku/SudukoV1.cpp:112:9: style: The scope of the variable 'sudoku' can be reduced. [variableScope]
+    int sudoku [9][9]{};
+        ^
+w1d1/Assignment2.cpp:24:20: style: Expression is always true because 'else if' condition is opposite to previous condition at line 20. [multiCondition]
+        else if (a < 'A'){
+                   ^
+w1d1/Assignment2.cpp:20:15: note: first condition
+        if (a >= 'A'){
+              ^
+w1d1/Assignment2.cpp:24:20: note: else if condition is opposite to first condition
+        else if (a < 'A'){
+                   ^
+w1d4/Assignment.h:39:1: style: The class 'Part' does not have a constructor although it has private member variables. [noConstructor]
+class Part {
+^
+w1d4/Assignment.h:45:1: style: The class 'ServiceVisit' does not have a constructor although it has private member variables. [noConstructor]
+class ServiceVisit {
+^
+w1d4/Assignment.h:26:34: performance: Function parameter 'name' should be passed by const reference. [passedByValue]
+    void addCustomer(std::string name, std::string address) {
+                                 ^
+w1d4/Assignment.h:26:52: performance: Function parameter 'address' should be passed by const reference. [passedByValue]
+    void addCustomer(std::string name, std::string address) {
+                                                   ^
+w1d5/shapes.h:11:10: style:inconclusive: Technically the member function 'Shape::print' can be const. [functionConst]
+    void print() {
+         ^
+w1d5/shapes.h:14:10: style:inconclusive: Technically the member function 'Shape::operator<' can be const. [functionConst]
+    bool operator <(const Shape &s); // Operator overload
+         ^
+w1d5/Assignment.cpp:10:13: note: Technically the member function 'Shape::operator<' can be const.
+bool Shape::operator<(const Shape &s){
+            ^
+w1d5/shapes.h:14:10: note: Technically the member function 'Shape::operator<' can be const.
+    bool operator <(const Shape &s); // Operator overload
+         ^
+w1d5/shapes.h:15:10: style:inconclusive: Technically the member function 'Shape::operator>' can be const. [functionConst]
+    bool operator >(const Shape &s);
+         ^
+w1d5/Assignment.cpp:19:13: note: Technically the member function 'Shape::operator>' can be const.
+bool Shape::operator>(const Shape &s){
+            ^
+w1d5/shapes.h:15:10: note: Technically the member function 'Shape::operator>' can be const.
+    bool operator >(const Shape &s);
+         ^
+w1d5/shapes.h:16:10: style:inconclusive: Technically the member function 'Shape::operator==' can be const. [functionConst]
+    bool operator ==(const Shape &s);
+         ^
+w1d5/Assignment.cpp:28:13: note: Technically the member function 'Shape::operator==' can be const.
+bool Shape::operator==(const Shape &s){
+            ^
+w1d5/shapes.h:16:10: note: Technically the member function 'Shape::operator==' can be const.
+    bool operator ==(const Shape &s);
+         ^
+w1d5/shapes.h:25:5: style: Class 'Circle' has a constructor with 1 argument that is not explicit. [noExplicitConstructor]
+    Circle(const int &radius):Shape((2*3*radius),(3*radius*radius)){}
+    ^
+w1d5/shapes.h:43:5: style: Class 'Square' has a constructor with 1 argument that is not explicit. [noExplicitConstructor]
+    Square(const int width):Shape((4*width),(width*width)){}
+    ^
+w2d5/1.cpp:31:14: error: Deallocation of an auto-variable results in undefined behaviour. [autovarInvalidDeallocation]
+    delete[] a; //delete pointer from fillArray since we are done with it now
+             ^
+nofile:0:0: information: Cppcheck cannot find all the include files (use --check-config for details) [missingIncludeSystem]
+
