@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <chrono>
 
 //This can be in a separate file? since outside main?
 const int Blank = 0; //define a constant that is not allowed to change
@@ -106,17 +107,18 @@ void printsudoku(int sudoku[9][9]){
 }
 
         
-
-
 int main(){
-    int sudoku [9][9]{};
-
+    
     // Enter file to solve here:
     std::string filename;
     std::cout << "Enter the name of your sudoku file:" << std::endl;
     std::cin >> filename;
     //std::ifstream sudokufile ("EasySudoku.txt");
     std::ifstream sudokufile (filename);
+
+    auto begin = std::chrono::high_resolution_clock::now();
+
+    int sudoku [9][9]{};
 
     // Read input file into array
     if (sudokufile.is_open()){
@@ -148,6 +150,9 @@ int main(){
 
     else {std::cout << "Can't open the file" << std::endl;}
 
+    auto end = std::chrono::high_resolution_clock::now();
+    auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(end-begin);
+    std::cout<<"Time of execution: " << elapsed.count() << " micro seconds" << std::endl;
     
     return 0;
 }

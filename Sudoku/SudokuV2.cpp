@@ -4,49 +4,69 @@
 #include <algorithm>*/
 #include "SudokuV2.h"
 
-/*bool assignValue(Cell (&sudoku)[9][9], int i, int j){
+bool assignValue(Cell (&sudoku)[9][9], int i, int j){
     int value = sudoku[i][j].poss[0];
     if(isSafe(sudoku, i, j, value)){
         sudoku[i][j].val = sudoku[i][j].poss[0];
         sudoku[i][j].poss.clear();
-        removeAndUpdatePeers(sudoku, i, j);
+        if(!removeAndUpdatePeers(sudoku, i, j)){
+        return false;
+        }
         return true;
     }
     else{return false;} //HUR ANVÄNDER JAG OUTPUTEN FRÅN DENNA?
-}*/
+}
 
-void assignValue(Cell (&sudoku)[9][9], int i, int j){
+/*void assignValue(Cell (&sudoku)[9][9], int i, int j){
     sudoku[i][j].val = sudoku[i][j].poss[0];
     sudoku[i][j].poss.clear();
     removeAndUpdatePeers(sudoku, i, j);
-}
+}*/
     
-
-
 // Removes possible vaules from column peers
-void removeFromColPeers(Cell (&sudoku)[9][9], int i, int j){
+bool removeFromColPeers(Cell (&sudoku)[9][9], int i, int j){
+    //return false;
     //int value = sudoku[i][j].val;
 	for (int row = 0; row < 9; row++){
         sudoku[row][j].poss.erase(std::remove((sudoku[row][j].poss.begin()), (sudoku[row][j].poss.end()), (sudoku[i][j].val)), sudoku[row][j].poss.end());
         // If there is only one possible value assign it and check its peers (recursive)
+        if (sudoku[row][j].poss.empty() && sudoku[row][j].val == 0){
+            return false;
+            //return true;
+        }
+        
         if (sudoku[row][j].poss.size()==1){
-            assignValue(sudoku, row, j);
+            if(!assignValue(sudoku, row, j)){
+                return false;
+            }
+            
             //sudoku[row][j].val = sudoku[row][j].poss[0];
             //sudoku[row][j].poss.clear();
             //removeAndUpdatePeers(sudoku, row, j);
         }
         //std::remove(sudoku[row][j].poss.begin(), sudoku[row][j].poss.end(), value); this does not remove the element completely!
         //std::erase(sudoku[row][j].poss,value); from c++ 20
-		}
+       
+	}
+    return true;
+
 }
 
 // Removes possible vaules from row peers
-void removeFromRowPeers(Cell (&sudoku)[9][9], int i, int j){
+bool removeFromRowPeers(Cell (&sudoku)[9][9], int i, int j){
+    //return false;
 	for (int col = 0; col < 9; col++){
         sudoku[i][col].poss.erase(std::remove((sudoku[i][col].poss.begin()), (sudoku[i][col].poss.end()), (sudoku[i][j].val)), sudoku[i][col].poss.end());
         // If there is only one possible value assign it and check its peers (recursive)
+        if (sudoku[i][col].poss.empty() && sudoku[i][col].val == 0){
+            return false;
+            //return true;
+        }
+        
         if (sudoku[i][col].poss.size()==1){
-            assignValue(sudoku, i, col);
+            if(!assignValue(sudoku, i, col)){
+                return false;
+            }
             //if (isSafe(sudoku, i, col, sudoku[i][col].val)){
                 //sudoku[i][col].val = sudoku[i][col].poss[0];
                 //sudoku[i][col].poss.clear();
@@ -54,34 +74,50 @@ void removeFromRowPeers(Cell (&sudoku)[9][9], int i, int j){
                 //return true;
             //}
             //else{return false;}
-
         }
+       
 
 	}
+    return true;
 }
 
 // Removes possible vaules from box peers
-void removeFromBoxPeers(Cell (&sudoku)[9][9], int i, int j){
+bool removeFromBoxPeers(Cell (&sudoku)[9][9], int i, int j){
+    //return false;
     int boxstartrw = i - i %3;
     int boxstartcol = j - j %3;
 	for (int row = 0; row < 3; row++){
         for (int col = 0; col <3; col++){
             sudoku[row+boxstartrw][col+boxstartcol].poss.erase(std::remove((sudoku[row+boxstartrw][col+boxstartcol].poss.begin()),(sudoku[row+boxstartrw][col+boxstartcol].poss.end()),(sudoku[i][j].val)),sudoku[row+boxstartrw][col+boxstartcol].poss.end());
             // If there is only one possible value assign it and check its peers (recursive)
+            if (sudoku[row+boxstartrw][col+boxstartcol].poss.empty() && sudoku[row+boxstartrw][col+boxstartcol].val == 0){
+                return false;
+                //return true;
+            }
+            
             if (sudoku[row+boxstartrw][col+boxstartcol].poss.size()==1){
-                assignValue(sudoku, row+boxstartrw, col+boxstartcol);
+                if(!assignValue(sudoku, row+boxstartrw, col+boxstartcol)){
+                    return false;
+                }
                 //sudoku[row+boxstartrw][col+boxstartcol].val = sudoku[row+boxstartrw][col+boxstartcol].poss[0];
                 //sudoku[row+boxstartrw][col+boxstartcol].poss.clear();
                 //removeAndUpdatePeers(sudoku, row+boxstartrw, col+boxstartcol);
             }
+            
         }		
-	}	 
+	}
+    return true;	 
 }
 
-void removeAndUpdatePeers(Cell (&sudoku)[9][9], int i, int j){
-    removeFromColPeers(sudoku, i, j); 
-    removeFromRowPeers(sudoku, i, j); 
+bool removeAndUpdatePeers(Cell (&sudoku)[9][9], int i, int j){ //returns true if all peer removals are true BEHÖVER LOGIKEN VARA OMVÄND?
+    if (!removeFromColPeers(sudoku, i, j) || !removeFromRowPeers(sudoku, i, j) || !removeFromBoxPeers(sudoku, i, j)){
+        return false;
+    }
+    else{
+    return removeFromColPeers(sudoku, i, j) && 
+    removeFromRowPeers(sudoku, i, j) && 
     removeFromBoxPeers(sudoku, i, j);
+    }
 }
 
 void checkUniqueRow(Cell (&sudoku)[9][9], int i, int j, int checkVal){
@@ -235,7 +271,7 @@ std::pair<int, int> getMinPossible(Cell (&sudoku)[9][9]){
 
 
 
-bool solveSudoku(Cell (&sudoku)[9][9]){
+bool guessSudoku(Cell (&sudoku)[9][9]){
     // If sudoku grid ia already full return true --> it is solved
     if (GRID_FULL == getUnassignedLocation(sudoku)){
         return true;
@@ -250,7 +286,7 @@ bool solveSudoku(Cell (&sudoku)[9][9]){
     int row =rowAndCol.first;
     int col = rowAndCol.second;
 
-    for (int x = 0; x <= sudoku[row][col].poss.size(); x++){
+    for (int x = 0; x < sudoku[row][col].poss.size(); x++){
         // If placing the current number in the current unassigned location, go ahead
         int num = sudoku[row][col].poss.at(x);
 
@@ -266,12 +302,25 @@ bool solveSudoku(Cell (&sudoku)[9][9]){
 
             sudoku[row][col].val = num;
             sudoku[row][col].poss.clear();
-            removeAndUpdatePeers(sudoku, row, col); //might cause assignment of not ok values --> this function must return if a not ok assignment is done
-
+            /*removeAndUpdatePeers(sudoku, row, col);
+            std::cout << "------------------------" << std::endl;
+            printSudokuPossibility(sudoku);
             // Do the same thing again recursively. If we go through all of the recursions, and in the end 
-			// return true, then all of our number placements on the Soduko grid are valid and we have fully solved it
-            if (solveSudoku(sudoku)){
+            // return true, then all of our number placements on the Soduko grid are valid and we have fully solved it
+            if (guessSudoku(sudoku)){
                 return true;
+            }*/
+
+            if(removeAndUpdatePeers(sudoku, row, col)){ //might cause assignment of not ok values --> this function must return if a not ok assignment is done
+
+                //std::cout << "------------------------" << std::endl;
+                //printSudokuPossibility(sudoku);
+                
+                // Do the same thing again recursively. If we go through all of the recursions, and in the end 
+                // return true, then all of our number placements on the Soduko grid are valid and we have fully solved it
+                if (guessSudoku(sudoku)){
+                    return true;
+                }
             }
             // As we were not able to validly go through all of the recursions, we must have an invalid number
 			// placement somewhere. Lets go back and try a different number for this particular unassigned location
@@ -338,7 +387,7 @@ int main(){
         std::cout<< "\nHere are all possible solutions after rule (1) of constraint propagation:" << std::endl;
         printSudokuPossibility(grid);
 
-        //The following should be done in a nicer way :) Perhaps everytime we assign a value?
+        //The following should be done in a nicer way :) Perhaps everytime we assign a value? Flytta till slutet av removeAndUpdatePeers
 
         for(int i{}; i !=9; ++i){
             for(int j{}; j !=9; ++j){
@@ -377,7 +426,7 @@ int main(){
         printSudokuPossibility(grid);
 
         //Start brute forcing
-        if (true == solveSudoku(grid)){
+        if (true == guessSudoku(grid)){
 
         // Print the sudoku solution
         std::cout<< "\nThis is the solution to your sudoku:" << std::endl;

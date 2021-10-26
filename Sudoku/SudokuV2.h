@@ -28,11 +28,11 @@ class Cell {
 
 void printSudoku(Cell sudoku[9][9]);
 
-void removeAndUpdatePeers(Cell (&sudoku)[9][9], int i, int j);
-void removeFromColPeers(Cell (&sudoku)[9][9], int i, int j);
-void removeFromRowPeers(Cell (&sudoku)[9][9], int i, int j);
-void removeFromBoxPeers(Cell (&sudoku)[9][9], int i, int j);
-void assignValue(Cell (&sudoku)[9][9], int i, int j);
+bool removeAndUpdatePeers(Cell (&sudoku)[9][9], int i, int j);
+bool removeFromColPeers(Cell (&sudoku)[9][9], int i, int j);
+bool removeFromRowPeers(Cell (&sudoku)[9][9], int i, int j);
+bool removeFromBoxPeers(Cell (&sudoku)[9][9], int i, int j);
+bool assignValue(Cell (&sudoku)[9][9], int i, int j);
 void checkUniqueRow(Cell (&sudoku)[9][9], int i, int j, int checkVal);
 void checkUniqueCol(Cell (&sudoku)[9][9], int i, int j, int checkVal);
 void checkUniqueBox(Cell (&sudoku)[9][9], int i, int j, int checkVal);
@@ -40,6 +40,7 @@ bool isSafe(Cell (&sudoku)[9][9], int row, int col, int num);
 bool used_in_box(Cell (&sudoku)[9][9], int box_start_rpw, int box_start_col, int num);
 bool used_in_col(Cell (&sudoku)[9][9], int col, int num);
 bool used_in_row(Cell (&sudoku)[9][9], int row, int num);
+bool guessSudoku(Cell (&sudoku)[9][9]);
 
 
 
