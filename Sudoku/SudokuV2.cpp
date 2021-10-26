@@ -1,27 +1,18 @@
-/*#include <iostream>
-#include <vector>
-#include <fstream>
-#include <algorithm>*/
 #include "SudokuV2.h"
 
+// Assigns value when there is only one possibility left. First checks if assignment is ok. 
 bool assignValue(Cell (&sudoku)[9][9], int i, int j){
     int value = sudoku[i][j].poss[0];
     if(isSafe(sudoku, i, j, value)){
         sudoku[i][j].val = sudoku[i][j].poss[0];
         sudoku[i][j].poss.clear();
         if(!removeAndUpdatePeers(sudoku, i, j)){
-        return false;
+            return false;
         }
-        return true;
+    return true;
     }
-    else{return false;} //HUR ANVÄNDER JAG OUTPUTEN FRÅN DENNA?
+    else{return false;}
 }
-
-/*void assignValue(Cell (&sudoku)[9][9], int i, int j){
-    sudoku[i][j].val = sudoku[i][j].poss[0];
-    sudoku[i][j].poss.clear();
-    removeAndUpdatePeers(sudoku, i, j);
-}*/
     
 // Removes possible vaules from column peers
 bool removeFromColPeers(Cell (&sudoku)[9][9], int i, int j){
@@ -199,7 +190,6 @@ void printSudokuPossibility(Cell sudoku[9][9]){
     }
 }
 
-
 // Returns a boolean which indicates whether any assigned entry in the specified row matches the given number. 
 bool usedInRow(Cell (&sudoku)[9][9], int row, int num){
 	for (int col = 0; col < 9; col++)
@@ -239,23 +229,22 @@ bool isSafe(Cell (&sudoku)[9][9], int row, int col, int num){
 		!usedInBox(sudoku, row - row % 3, col - col % 3, num);
 }
 
-// Searches the grid to find an entry that is still unassigned. If found, the reference parameters row, col will be set the location
-// that is unassigned, and true is returned. If no unassigned entries remain, false is returned. 
-const std::pair<int, int> GRID_FULL = std::make_pair(9,9);
-std::pair<int, int> getUnassignedLocation(Cell (&sudoku)[9][9]){ //THIS CAN BE REPLACED WITH CHECK TO ONLY SEE IF FULL
+// Searches the grid to find an entry that is still unassigned. If found return false, otherwise return GridFull (true). 
+const bool GridFull = true;
+bool checkGridFull(Cell (&sudoku)[9][9]){
 	for (int row = 0; row < 9; row++)
 		for (int col = 0; col < 9; col++)
 			if (sudoku[row][col].val == 0){
-				return std::make_pair(row, col);
+				return false;
 			}
-	return GRID_FULL;
+	return GridFull;
 }
 
-
-int rowmin = 0;
-int colmin = 0;
+// Searches grid for index with minimum possible solutions
 std::pair<int, int> getMinPossible(Cell (&sudoku)[9][9]){
     int min =10; //Start at 10 since maxiumum is 9 possibilities
+    int rowmin = 0;
+    int colmin = 0;
 	for (int row = 0; row < 9; row++){
 		for (int col = 0; col < 9; col++){
             //If possible solutions is less than previous but more than 0 --> save index in array
@@ -270,16 +259,11 @@ std::pair<int, int> getMinPossible(Cell (&sudoku)[9][9]){
 }
 
 
-
 bool guessSudoku(Cell (&sudoku)[9][9]){
     // If sudoku grid ia already full return true --> it is solved
-    if (GRID_FULL == getUnassignedLocation(sudoku)){
+    if (GridFull == checkGridFull(sudoku)){
         return true;
     }
-    // Get location of unassigned
-    /*std::pair<int, int> row_and_col = getUnassignedLocation(sudoku);
-    int row = row_and_col.first;
-    int col = row_and_col.second;*/
 
     //Get location with minumum possible solution
     std::pair<int,int> rowAndCol = getMinPossible(sudoku);
@@ -302,16 +286,7 @@ bool guessSudoku(Cell (&sudoku)[9][9]){
 
             sudoku[row][col].val = num;
             sudoku[row][col].poss.clear();
-            /*removeAndUpdatePeers(sudoku, row, col);
-            std::cout << "------------------------" << std::endl;
-            printSudokuPossibility(sudoku);
-            // Do the same thing again recursively. If we go through all of the recursions, and in the end 
-            // return true, then all of our number placements on the Soduko grid are valid and we have fully solved it
-            if (guessSudoku(sudoku)){
-                return true;
-            }*/
-
-            if(removeAndUpdatePeers(sudoku, row, col)){ //might cause assignment of not ok values --> this function must return if a not ok assignment is done
+            if(removeAndUpdatePeers(sudoku, row, col)){ // If a NOK assignment has been done go back and try a different guess otherwise continue
 
                 //std::cout << "------------------------" << std::endl;
                 //printSudokuPossibility(sudoku);
@@ -330,16 +305,12 @@ bool guessSudoku(Cell (&sudoku)[9][9]){
                     sudoku[i][j] = backup[i][j];
                 }
             }
-            
-            //HUR TAR JAG BORT DET JAG GJORT PÅ MINA PEERS OCH TAR TILLBAKA POSSIBLE VALUES?
-            //SPARA UNDAN GRIDET INNAN JAG GÖR TILLFÄLLIG ASSINGMENT?
         }                  
     }
     // If we have gone through all possible numbers for the current unassigned location, then we probably assigned a bad number early. 
     // Lets backtrack and try a different number for the previous unassigned locations.
 	return false; 
 }
-
 
 
 int main(){
@@ -361,6 +332,7 @@ int main(){
         Cell grid[9][9];
 
         // Fill sudoku array with elements from text file
+        // Currently empty cells needs to be indicated with blank space and 0 (do find and replace in input file)
         for(int i{}; i !=9; ++i){
             for(int j{}; j !=9; ++j){
               sudokufile >> grid[i][j].val;
@@ -374,8 +346,7 @@ int main(){
         std::cout<< "This is the sudoku to solve:" << std::endl;
         printSudoku(grid);
         
-
-        //Start solving
+        //Start solving, this could be done in the previous loop but since I want to print I splitted it
         for(int i{}; i !=9; ++i){
             for(int j{}; j !=9; ++j){
                 if (grid[i][j].val !=0){
@@ -434,13 +405,6 @@ int main(){
 
         }
         else {std::cout << "\nThere is no solution to your sudoku" << std::endl;}
-
-
-        //std::cout<< "\nThis is the solution:" << std::endl;
-        //printSudoku(grid);
-        //Uncomment if you want to see possible solutions in grid
-        /*std::cout<< "Here are all possible solutions:" << std::endl;
-        printSudokuPossibility(grid);*/
 
     }
     else {std::cout << "Can't open the file" << std::endl;}
