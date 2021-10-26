@@ -263,13 +263,14 @@ std::pair<int, int> getMinPossible(Cell (&sudoku)[9][9]){
     return std::make_pair(rowmin, colmin);
 }
 
-
+int nrGuesses = 0;
 bool guessSudoku(Cell (&sudoku)[9][9]){
     // If sudoku grid ia already full return true --> it is solved
     if (GridFull == checkGridFull(sudoku)){
+        std::cout << "\nNumber of guesses in search: "<< nrGuesses << std::endl;
         return true;
     }
-
+    
     //Get location with minumum possible solution
     std::pair<int,int> rowAndCol = getMinPossible(sudoku);
     int row =rowAndCol.first;
@@ -278,8 +279,12 @@ bool guessSudoku(Cell (&sudoku)[9][9]){
     for (int x = 0; x < sudoku[row][col].poss.size(); x++){
         // If placing the current number in the current unassigned location, go ahead
         int num = sudoku[row][col].poss.at(x);
-
+        
         if (isSafe(sudoku, row, col, num)){ //Behövs detta eftersom man bara tar posbible och uppdaterar alla peers?
+
+            nrGuesses++; // Increase counter for number of guesses every time a new safe guess is made
+            //std::cout << "\nNumber of guesses: "<< nrGuesses << std::endl;
+            //std::cout << "Guess number: "<< num << " at [" << row << "][" << col << "]" << std::endl;
         
             // Create backup and make tentative assignment
             Cell backup[9][9]{};
@@ -310,7 +315,7 @@ bool guessSudoku(Cell (&sudoku)[9][9]){
                     sudoku[i][j] = backup[i][j];
                 }
             }
-        }                  
+        }               
     }
     // If we have gone through all possible numbers for the current unassigned location, then we probably assigned a bad number early. 
     // Lets backtrack and try a different number for the previous unassigned locations.
@@ -364,7 +369,6 @@ int main(){
         printSudokuPossibility(grid);
 
         //The following should be done in a nicer way :) Perhaps everytime we assign a value? Flytta till slutet av removeAndUpdatePeers
-
         checkUnique(grid);
 
         std::cout<< "\nHere are all possible solutions after rule (1) and (2) of constraint propagation:" << std::endl;
