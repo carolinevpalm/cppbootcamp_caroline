@@ -3,3 +3,7 @@ cppcheck_report.txt
 
 # ignore binary
 *.out
+
+# ignore object files
+*.so
+*.o
