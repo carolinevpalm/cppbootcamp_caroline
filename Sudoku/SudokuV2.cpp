@@ -293,6 +293,9 @@ bool guessSudoku(Cell (&sudoku)[9][9]){
                     backup[i][j] = sudoku[i][j];
                 }
             }
+            //Above not needed do 
+            //Cell backup [9][9]{};
+            //backup = sudoku;
 
             sudoku[row][col].val = num;
             sudoku[row][col].poss.clear();
@@ -355,6 +358,7 @@ int main(){
             //std::cout << sudokustring << std::endl;
             
             auto beginPuzzle = std::chrono::high_resolution_clock::now();
+            nrGuesses = 0;
 
             // Initialize grid with all possibilities and 0 values according to constructor in class
             Cell grid[9][9];
@@ -408,7 +412,7 @@ int main(){
 
             std::cout<<"-----------------------------------------\n"<<std::endl;
 
-            nrGuesses = 0;
+            
 
             }
             else {std::cout << "\nThere is no solution to your sudoku" << std::endl;}
