@@ -1,4 +1,4 @@
-#include "SudokuV2.h"
+#include "InputHeader/SudokuV2.h"
 
 // Assigns value when there is only one possibility left. First checks if assignment is ok. 
 bool assignValue(Cell (&sudoku)[9][9], int i, int j){
@@ -348,7 +348,7 @@ int main(){
     //Start execution timer
     auto begin = std::chrono::high_resolution_clock::now();
 
-    std::ifstream sudokufile ("SudokuListSlack.txt");
+    std::ifstream sudokufile ("InputSudokus/SudokuListSlack.txt");
     std::string sudokustring;
 
     // Read input file into array
