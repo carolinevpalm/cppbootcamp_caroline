@@ -44,7 +44,7 @@ bool usedInCol(Cell (&sudoku)[9][9], int col, int num);
 bool usedInRow(Cell (&sudoku)[9][9], int row, int num);
 bool guessSudoku(Cell (&sudoku)[9][9]);
 
-//extern int nrGuesses;
+extern int nrGuesses;
 
 
 
