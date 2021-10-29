@@ -3,17 +3,10 @@
 
 #include <iostream>
 #include <vector>
+#include <array>
 #include <fstream>
 #include <algorithm>
 #include <chrono>
-
-/*typedef struct cell { //Gör om till Class?
-    int val;
-    std::vector<int> poss;
-
-    //What functions should be included here?
-
-}Cell;*/
 
 class Cell {
     public:
@@ -25,6 +18,19 @@ class Cell {
         }
 
 }; //What functions should be included here?
+
+/*class Grid : public Cell {
+    public:
+        //const size_t rows;
+        //const size_t cols;
+        std::array<std::array<Cell,9>,9> grid;
+        Grid(){
+            grid =  
+        } 
+};*/
+
+using grid_t = std::array<std::array<Cell,9>,9>;
+
 
 void printSudoku(Cell sudoku[9][9]);
 void printSudokuPossibility(Cell sudoku[9][9]);

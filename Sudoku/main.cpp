@@ -23,7 +23,7 @@ int main(){
     //Start execution timer
     auto begin = std::chrono::high_resolution_clock::now();
 
-    std::ifstream sudokufile ("InputSudokus/SudokuList.txt");
+    std::ifstream sudokufile ("InputSudokus/SudokuListSlack.txt");
     std::string sudokustring;
 
     // Read input file into array
@@ -37,6 +37,8 @@ int main(){
 
             // Initialize grid with all possibilities and 0 values according to constructor in class
             Cell grid[9][9];
+            //grid_t grid2;
+            
             int i = 0;
             int j = 0;
             for (char c:sudokustring){
@@ -60,7 +62,9 @@ int main(){
             for(int i{}; i !=9; ++i){
                 for(int j{}; j !=9; ++j){
                     if (grid[i][j].val !=0){
-                        removeAndUpdatePeers(grid, i, j);   
+                        removeAndUpdatePeers(grid, i, j);
+                        //std::cout<< "\n ---------------" << std::endl;
+                        //printSudokuPossibility(grid);   
                     }
                 }
             }
@@ -74,7 +78,7 @@ int main(){
             //std::cout<< "\nHere are all possible solutions after rule (1) and (2) of constraint propagation:" << std::endl;
             //printSudokuPossibility(grid);
 
-            //Start brute forcing
+            //Start guessing
             if (true == guessSudoku(grid)){
 
                 // Print the sudoku solution
