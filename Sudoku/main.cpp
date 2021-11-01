@@ -23,7 +23,7 @@ int main(){
     //Start execution timer
     auto begin = std::chrono::high_resolution_clock::now();
 
-    std::ifstream sudokufile ("InputSudokus/SudokuListSlack.txt");
+    std::ifstream sudokufile ("InputSudokus/HardString.txt");
     std::string sudokustring;
 
     // Read input file into array
@@ -63,8 +63,8 @@ int main(){
                 for(int j{}; j !=9; ++j){
                     if (grid[i][j].val !=0){
                         removeAndUpdatePeers(grid, i, j);
-                        //std::cout<< "\n ---------------" << std::endl;
-                        //printSudokuPossibility(grid);   
+                        std::cout<< "\n ---------------" << std::endl;
+                        printSudokuPossibility(grid);   
                     }
                 }
             }
@@ -73,13 +73,13 @@ int main(){
             //printSudokuPossibility(grid);
 
             //The following should be done in a nicer way :) Perhaps everytime we assign a value? Flytta till slutet av removeAndUpdatePeers
-            checkUnique(grid);
+            //checkUnique(grid);
 
             //std::cout<< "\nHere are all possible solutions after rule (1) and (2) of constraint propagation:" << std::endl;
             //printSudokuPossibility(grid);
 
             //Start guessing
-            if (true == guessSudoku(grid)){
+            /*if (true == guessSudoku(grid)){
 
                 // Print the sudoku solution
                 std::cout<< "\nThis is the solution to your sudoku:\n" << std::endl;
@@ -91,7 +91,7 @@ int main(){
 
                 std::cout<<"-----------------------------------------\n"<<std::endl;
             }
-            else {std::cout << "\nThere is no solution to your sudoku" << std::endl;}
+            else {std::cout << "\nThere is no solution to your sudoku" << std::endl;}*/
 
         }
 
