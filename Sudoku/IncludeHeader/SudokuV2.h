@@ -39,7 +39,7 @@ bool removeAndUpdatePeers(Cell (&sudoku)[9][9], int i, int j);
 bool removeFromColPeers(Cell (&sudoku)[9][9], int i, int j);
 bool removeFromRowPeers(Cell (&sudoku)[9][9], int i, int j);
 bool removeFromBoxPeers(Cell (&sudoku)[9][9], int i, int j);
-bool assignValue(Cell (&sudoku)[9][9], int i, int j);
+bool assignValue(Cell (&sudoku)[9][9], int i, int j,int value);
 void removePossibility(Cell (&sudoku)[9][9], int i, int j, int value);
 void checkUniqueRow(Cell (&sudoku)[9][9], int i, int j, int checkVal);
 void checkUniqueCol(Cell (&sudoku)[9][9], int i, int j, int checkVal);

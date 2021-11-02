@@ -1,14 +1,28 @@
 #include "../IncludeHeader/SudokuV2.h"
 
 void removePossibility(Cell (&sudoku)[9][9], int i, int j, int value){
+    bool ret = true;
     auto &cell = sudoku[i][j];
-    //const auto sizeBeforeRemove = cell.poss.size();
+    const auto sizeBeforeRemove = cell.poss.size();
     cell.poss.erase(std::remove((cell.poss.begin()), (cell.poss.end()), value), cell.poss.end());
-    /*if (cell.poss.size() < sizeBeforeRemove){
-        checkUniqueRow(sudoku, i , j, value);
-        checkUniqueCol(sudoku, i , j, value);
-        checkUniqueBox(sudoku, i , j, value);
-    }*/
+    
+    // Check that the last possible solution is not removed before value has been assigned
+    if (cell.poss.empty() && cell.val == 0){
+        ret = false;
+    }
+    // If there is only one possible value assign it and check its peers (recursive)
+    else if (cell.poss.size()==1 && cell.val == 0){
+        int assignVal = cell.poss[0];
+        if(!assignValue(sudoku, i, j, assignVal)){
+            ret = false;
+        }
+    }
+    // To determine if value was removed compare size, if decreased then check for unique row, col and box
+    else if (cell.poss.size() < sizeBeforeRemove){
+        checkUniqueRow(sudoku, i, j, value);
+        checkUniqueCol(sudoku, i, j, value);
+        checkUniqueBox(sudoku, i, j, value);
+    }
 }
 
 // Assigns value. First checks if assignment is ok. 
@@ -18,19 +32,12 @@ bool assignValue(Cell (&sudoku)[9][9], int i, int j, int value){
     if(isSafe(sudoku, i, j, value)){
         ret = true;
         sudoku[i][j].val = value;
-        /*if (sudoku[i][j].poss.size()>1){
-            auto &cell = sudoku[i][j];
-            cell.poss.erase(std::remove((cell.poss.begin()), (cell.poss.end()), (sudoku[i][j].val)), cell.poss.end());
-            for (int x =0; x < cell.poss.size(); x++){
-                int checkVal = cell.poss[x];
-                cell.poss.erase(std::remove((cell.poss.begin()), (cell.poss.end()), checkVal), cell.poss.end());
-                checkUniqueRow(sudoku, i, j, checkVal);
-                checkUniqueCol(sudoku, i, j, checkVal);
-                checkUniqueBox(sudoku, i, j, checkVal);
-            }
-        }*/
-        sudoku[i][j].poss.clear();
-        //removePossibility(sudoku, i, j, value);
+        
+        //sudoku[i][j].poss.clear();
+        std::vector<int> removedPoss = sudoku[i][j].poss; //save removed possibilities for check unique
+        for (int x = 0; x < removedPoss.size(); x++){
+            removePossibility(sudoku, i, j, removedPoss[x]);
+        } 
         if(!removeAndUpdatePeers(sudoku, i, j)){
             //return false;
             ret = false;
@@ -45,18 +52,12 @@ bool removeFromColPeers(Cell (&sudoku)[9][9], int i, int j){
     //int removeVal = sudoku[i][j].val;
 	for (int row = 0; row < 9; row++){
         auto &cell = sudoku[row][j];
-        removePossibility(sudoku, row, j, sudoku[i][j].val);
         const auto sizeBeforeRemove = cell.poss.size();
+        removePossibility(sudoku, row, j, sudoku[i][j].val);
         //cell.poss.erase(std::remove((cell.poss.begin()), (cell.poss.end()), (sudoku[i][j].val)), cell.poss.end());
-        if (cell.poss.size() < sizeBeforeRemove){
-            checkUniqueRow(sudoku, row , j, sudoku[i][j].val);
-            //checkUniqueCol(sudoku, row , j; sudoku[i][j].val);
-            checkUniqueBox(sudoku, row , j, sudoku[i][j].val);
-
-        }
-
+        
         // Check that the last possible solution is not removed before value has been assigned
-        if (cell.poss.empty() && cell.val == 0){
+        /*if (cell.poss.empty() && cell.val == 0){
             ret = false;
         }
         // If there is only one possible value assign it and check its peers (recursive)
@@ -65,7 +66,12 @@ bool removeFromColPeers(Cell (&sudoku)[9][9], int i, int j){
             if(!assignValue(sudoku, row, j, value)){
                 ret = false;
             }
-        }     
+        }
+        else if (cell.poss.size() < sizeBeforeRemove){
+            checkUniqueRow(sudoku, row , j, sudoku[i][j].val);
+            //checkUniqueCol(sudoku, row , j; sudoku[i][j].val);
+            checkUniqueBox(sudoku, row , j, sudoku[i][j].val);
+        } */    
 	}
     return ret;
 }
@@ -78,15 +84,9 @@ bool removeFromRowPeers(Cell (&sudoku)[9][9], int i, int j){
         int sizeBeforeRemove = cell.poss.size();
         removePossibility(sudoku, i, col, sudoku[i][j].val);
         //cell.poss.erase(std::remove((cell.poss.begin()), (cell.poss.end()), (sudoku[i][j].val)), cell.poss.end());
-        // To determine if value was removed compare size, if decreased then check for unique row, col and box
-        if (cell.poss.size() < sizeBeforeRemove){
-            //checkUniqueRow(sudoku, i , col, sudoku[i][j].val);
-            checkUniqueCol(sudoku, i , col, sudoku[i][j].val);
-            checkUniqueBox(sudoku, i , col, sudoku[i][j].val);
-        }
-
+        
         // Check that the last possible solution is not removed before value has been assigned
-        if (cell.poss.empty() && cell.val == 0){
+        /*if (cell.poss.empty() && cell.val == 0){
             ret = false;
         }
         // If there is only one possible value assign it and check its peers (recursive)
@@ -95,7 +95,13 @@ bool removeFromRowPeers(Cell (&sudoku)[9][9], int i, int j){
             if(!assignValue(sudoku, i, col, value)){
                 ret = false;
             }
-        }     
+        }
+        // To determine if value was removed compare size, if decreased then check for unique row, col and box
+        else if (cell.poss.size() < sizeBeforeRemove){
+            //checkUniqueRow(sudoku, i , col, sudoku[i][j].val);
+            checkUniqueCol(sudoku, i , col, sudoku[i][j].val);
+            checkUniqueBox(sudoku, i , col, sudoku[i][j].val);
+        } */    
 	}
     return ret;
 }
@@ -111,13 +117,9 @@ bool removeFromBoxPeers(Cell (&sudoku)[9][9], int i, int j){
             int sizeBeforeRemove = cell.poss.size();
             removePossibility(sudoku, row+boxstartrw , col+boxstartcol, sudoku[i][j].val);
             //cell.poss.erase(std::remove((cell.poss.begin()),(cell.poss.end()),(sudoku[i][j].val)),cell.poss.end());
-            if (cell.poss.size() < sizeBeforeRemove){
-                checkUniqueRow(sudoku, row+boxstartrw , col+boxstartcol, sudoku[i][j].val);
-                checkUniqueCol(sudoku, row+boxstartrw , col+boxstartcol, sudoku[i][j].val);
-                //checkUniqueBox(sudoku, row+boxstartrw , col+boxstartcol, sudoku[i][j].val);
-            }
+            
             // Check that the last possible solution is not removed before value has been assigned
-            if (cell.poss.empty() && cell.val == 0){
+            /*if (cell.poss.empty() && cell.val == 0){
                 ret = false;
             }
             // If there is only one possible value assign it and check its peers (recursive)
@@ -126,7 +128,12 @@ bool removeFromBoxPeers(Cell (&sudoku)[9][9], int i, int j){
                 if(!assignValue(sudoku, row+boxstartrw, col+boxstartcol,value)){
                     ret = false;
                 }
-            }            
+            }
+            else if (cell.poss.size() < sizeBeforeRemove){
+                checkUniqueRow(sudoku, row+boxstartrw , col+boxstartcol, sudoku[i][j].val);
+                checkUniqueCol(sudoku, row+boxstartrw , col+boxstartcol, sudoku[i][j].val);
+                //checkUniqueBox(sudoku, row+boxstartrw , col+boxstartcol, sudoku[i][j].val);
+            }*/            
         }		
 	}
     return ret;	 
@@ -141,92 +148,52 @@ bool removeAndUpdatePeers(Cell (&sudoku)[9][9], int i, int j){
     else{return true;}
 }
 
-/*void checkUniqueRow(Cell (&sudoku)[9][9], int i, int j, int checkVal){
-    // Count if the value being checked is in the possible soulitions for any other cell in the row, 
-    // if not --> assign the value and update its peers.
-    int checkValCountRow = 0;
-    for (int col = 0; col < 9; col++){
-        auto &cell = sudoku[i][col];
-        if(std::find(cell.poss.begin(), cell.poss.end(), checkVal) != cell.poss.end()){
-            checkValCountRow++;
-        }     
-    }
-    if (checkValCountRow == 1){
-            assignValue(sudoku, i, j, checkVal);
-            //sudoku[i][j].val = checkVal;
-            //sudoku[i][j].poss.clear();
-            //removeAndUpdatePeers(sudoku, i, j);
-    }
-}*/
-
 void checkUniqueRow(Cell (&sudoku)[9][9], int i, int j, int checkVal){
     // Count if the value being checked is in the possible soulitions for any other cell in the row, 
     // if not --> assign the value and update its peers.
     
-    //for (int checkVal =1; checkVal <9; checkVal++){
-        int checkValCountRow = 0;
-        int rowUnique;
-        int colUnique;
-        for (int col = 0; col < 9; col++){
-            auto &cell = sudoku[i][col];
-            if(std::find(cell.poss.begin(), cell.poss.end(), checkVal) != cell.poss.end()){
-                checkValCountRow++;
-                // saves index to use in assignValue
-                rowUnique = i;
-                colUnique = col;
-            }
-            if(checkValCountRow > 1){
-                break;
-            }     
+    int checkValCountRow = 0;
+    int rowUnique;
+    int colUnique;
+    for (int col = 0; col < 9; col++){
+        auto &cell = sudoku[i][col];
+        if(std::find(cell.poss.begin(), cell.poss.end(), checkVal) != cell.poss.end()){
+            checkValCountRow++;
+            // saves index to use in assignValue
+            rowUnique = i;
+            colUnique = col;
         }
-        if (checkValCountRow == 1){
-                assignValue(sudoku, rowUnique, colUnique, checkVal);
-        }
-    //}
+        if(checkValCountRow > 1){
+            break;
+        }     
+    }
+    if (checkValCountRow == 1){
+            assignValue(sudoku, rowUnique, colUnique, checkVal);
+    }
 }
 
 void checkUniqueCol(Cell (&sudoku)[9][9], int i, int j, int checkVal){
     // Count if the value being checked is in the possible soulitions for any other cell in the column, 
     // if not --> assign the value and update its peers.
     
-    //for (int checkVal =1; checkVal <9; checkVal++){
-        int checkValCountCol = 0;
-        int rowUnique;
-        int colUnique;
-        for (int row = 0; row < 9; row++){
-            auto &cell = sudoku[row][j];
-            if(std::find(cell.poss.begin(), cell.poss.end(), checkVal) != cell.poss.end()){
-                checkValCountCol++;
-                rowUnique = row;
-                colUnique = j;
-            }
-            if(checkValCountCol > 1){
-                break;
-            }
-        }
-        if (checkValCountCol == 1){
-            assignValue(sudoku, rowUnique, colUnique, checkVal);
-        }
-    //}
-}
-
-/*void checkUniqueCol(Cell (&sudoku)[9][9], int i, int j, int checkVal){
-    // Count if the value being checked is in the possible soulitions for any other cell in the column, 
-    // if not --> assign the value and update its peers.
     int checkValCountCol = 0;
+    int rowUnique;
+    int colUnique;
     for (int row = 0; row < 9; row++){
         auto &cell = sudoku[row][j];
         if(std::find(cell.poss.begin(), cell.poss.end(), checkVal) != cell.poss.end()){
             checkValCountCol++;
+            rowUnique = row;
+            colUnique = j;
+        }
+        if(checkValCountCol > 1){
+            break;
         }
     }
     if (checkValCountCol == 1){
-        assignValue(sudoku, i, j, checkVal);
-        //sudoku[i][j].val = checkVal;
-        //sudoku[i][j].poss.clear();
-        //removeAndUpdatePeers(sudoku, i, j);
+        assignValue(sudoku, rowUnique, colUnique, checkVal);
     }
-}*/
+}
 
 void checkUniqueBox(Cell (&sudoku)[9][9], int i, int j, int checkVal){
     // Count if the value being checked is in the possible soulitions for any other cell in the box, 
@@ -234,84 +201,24 @@ void checkUniqueBox(Cell (&sudoku)[9][9], int i, int j, int checkVal){
     const int boxstartrw = i - i %3;
     const int boxstartcol = j - j %3;
     
-    //for (int checkVal =1; checkVal <9; checkVal++){
-        int checkValCountBox = 0;
-        int rowUnique;
-        int colUnique;
-        for (int row = 0; row < 3; row++){
-            for (int col = 0; col <3; col++){
-                auto &cell = sudoku[row+boxstartrw][col+boxstartcol];
-                if(std::find(cell.poss.begin(), cell.poss.end(), checkVal) != cell.poss.end()){
-                    checkValCountBox++;
-                    rowUnique = row+boxstartrw;
-                    colUnique = col+boxstartcol;
-                }
-            }
-        }
-        if (checkValCountBox == 1){
-            assignValue(sudoku, rowUnique, colUnique, checkVal);
-        }
-    //}
-}
-
-/*void checkUniqueBox(Cell (&sudoku)[9][9], int i, int j, int checkVal){
-    // Count if the value being checked is in the possible soulitions for any other cell in the box, 
-    // if not --> assign the value and update its peers.
-    const int boxstartrw = i - i %3;
-    const int boxstartcol = j - j %3;
     int checkValCountBox = 0;
+    int rowUnique;
+    int colUnique;
     for (int row = 0; row < 3; row++){
         for (int col = 0; col <3; col++){
             auto &cell = sudoku[row+boxstartrw][col+boxstartcol];
             if(std::find(cell.poss.begin(), cell.poss.end(), checkVal) != cell.poss.end()){
                 checkValCountBox++;
+                rowUnique = row+boxstartrw;
+                colUnique = col+boxstartcol;
             }
         }
     }
     if (checkValCountBox == 1){
-        assignValue(sudoku, i, j, checkVal);
-        //sudoku[i][j].val = checkVal;
-        //sudoku[i][j].poss.clear();
-        //removeAndUpdatePeers(sudoku, i, j);
-    }
-}*/
-
-/*void checkUnique(Cell (&sudoku)[9][9]){
-    for(int i{}; i !=9; ++i){
-        for(int j{}; j !=9; ++j){
-            if (sudoku[i][j].val ==0){
-                for(int x=0; x<sudoku[i][j].poss.size(); x++){
-                    int checkVal = sudoku[i][j].poss.at(x);
-                    //checkUniqueRow(sudoku, i, j, checkVal);
-                    checkUniqueRow(sudoku, i, j);
-                }
-            }
-        }
-    }
-
-    for(int i{}; i !=9; ++i){
-        for(int j{}; j !=9; ++j){
-            if (sudoku[i][j].val ==0){
-                for(int x=0; x<sudoku[i][j].poss.size(); x++){
-                    int checkVal = sudoku[i][j].poss.at(x);
-                    checkUniqueCol(sudoku, i, j, checkVal);
-                }
-            }
-        }
-    }
-
-    for(int i{}; i !=9; ++i){
-        for(int j{}; j !=9; ++j){
-            if (sudoku[i][j].val ==0){
-                for(int x=0; x<sudoku[i][j].poss.size(); x++){
-                    int checkVal = sudoku[i][j].poss.at(x);
-                    checkUniqueBox(sudoku, i, j, checkVal);
-                }
-            }
-        }
+        assignValue(sudoku, rowUnique, colUnique, checkVal);
     }
 }
-*/
+
 void printSudoku(Cell sudoku[9][9]){
     for (int i=0; i!=9; ++i){
         for (int j=0; j!=9; ++j){
