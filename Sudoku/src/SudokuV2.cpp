@@ -70,15 +70,15 @@ bool removeFromColPeers(Cell (&sudoku)[9][9], int i, int j){
             ret = false;
         }  
 	}
-    return true;
+    return ret;
 }
 
 // Removes possible vaules from row peers
 bool removeFromRowPeers(Cell (&sudoku)[9][9], int i, int j){
     bool ret = true;
 	for (int col = 0; col < 9; col++){
-        auto &cell = sudoku[i][col];
-        int sizeBeforeRemove = cell.poss.size();
+        //auto &cell = sudoku[i][col];
+        //int sizeBeforeRemove = cell.poss.size();
         if(!removePossibility(sudoku, i, col, sudoku[i][j].val)){
             ret = false;
         }   
@@ -93,8 +93,8 @@ bool removeFromBoxPeers(Cell (&sudoku)[9][9], int i, int j){
     const int boxstartcol = j - j %3;
 	for (int row = 0; row < 3; row++){
         for (int col = 0; col <3; col++){
-            auto &cell = sudoku[row+boxstartrw][col+boxstartcol];
-            int sizeBeforeRemove = cell.poss.size();
+            //auto &cell = sudoku[row+boxstartrw][col+boxstartcol];
+            //int sizeBeforeRemove = cell.poss.size();
             if(!removePossibility(sudoku, row+boxstartrw , col+boxstartcol, sudoku[i][j].val)){
                 ret = false;
             }           
@@ -104,9 +104,11 @@ bool removeFromBoxPeers(Cell (&sudoku)[9][9], int i, int j){
 }
 
 bool removeAndUpdatePeers(Cell (&sudoku)[9][9], int i, int j){
-    return removeFromColPeers(sudoku, i, j) && 
+    bool ret = (removeFromColPeers(sudoku, i, j) && 
             removeFromRowPeers(sudoku, i, j) &&
-            removeFromBoxPeers(sudoku, i, j);
+            removeFromBoxPeers(sudoku, i, j));
+    return ret;
+
 
         /*if(!removeFromColPeers(sudoku, i, j) || 
         !removeFromRowPeers(sudoku, i, j) || 
@@ -319,8 +321,8 @@ bool guessSudoku(Cell (&sudoku)[9][9]){
         //if (isSafe(sudoku, row, col, num)){ //Behövs detta eftersom man bara tar posbible och uppdaterar alla peers?
 
             nrGuesses++; // Increase counter for number of guesses every time a new safe guess is made
-            std::cout << "\nNumber of guesses: "<< nrGuesses << std::endl;
-            std::cout << "Guess number: "<< num << " at [" << row << "][" << col << "]" << std::endl;
+            //std::cout << "\nNumber of guesses: "<< nrGuesses << std::endl;
+            //std::cout << "Guess number: "<< num << " at [" << row << "][" << col << "]" << std::endl;
         
             // Create backup and make tentative assignment
             Cell backup[9][9]{};
@@ -337,8 +339,8 @@ bool guessSudoku(Cell (&sudoku)[9][9]){
             //sudoku[row][col].poss.clear();
             //if(removeAndUpdatePeers(sudoku, row, col)){ // If a NOK assignment has been done go back and try a different guess otherwise continue
             
-            std::cout << "------------------------" << std::endl;
-            printSudokuPossibility(sudoku);
+            //std::cout << "------------------------" << std::endl;
+            //printSudokuPossibility(sudoku);
             if(assignValue(sudoku, row, col, num)){
                 
                 
