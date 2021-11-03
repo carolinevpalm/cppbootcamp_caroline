@@ -23,7 +23,7 @@ int main(){
     //Start execution timer
     auto begin = std::chrono::high_resolution_clock::now();
 
-    std::ifstream sudokufile ("InputSudokus/SudokuListSlack.txt");
+    std::ifstream sudokufile ("InputSudokus/searchteststring.txt");
     std::string sudokustring;
 
     // Read input file into array
