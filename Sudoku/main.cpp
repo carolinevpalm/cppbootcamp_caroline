@@ -6,7 +6,7 @@ int main(){
     //Start execution timer
     auto begin = std::chrono::high_resolution_clock::now();
 
-    std::ifstream sudokufile ("InputSudokus/SudokuListSlack.txt");
+    std::ifstream sudokufile ("InputSudokus/benchmarkstring.txt");
     std::string sudokustring;
     int totalNrGuesses = 0;
 
@@ -67,7 +67,7 @@ int main(){
 
                 auto endPuzzle = std::chrono::high_resolution_clock::now();
                 auto elapsedPuzzle = std::chrono::duration_cast<std::chrono::microseconds>(endPuzzle-beginPuzzle);
-                std::cout<<"\nTime to solve puzzle: " << elapsedPuzzle.count() << " micro seconds" << std::endl;
+                std::cout<<"\nTime to solve puzzle: " << elapsedPuzzle.count()*1e-6 << " seconds" << std::endl;
 
                 std::cout<<"-----------------------------------------\n"<<std::endl;
             }
@@ -85,7 +85,7 @@ int main(){
     std::cout << "\n\nTotal number of guesses for all puzzles: "<< totalNrGuesses << std::endl;
     auto end = std::chrono::high_resolution_clock::now();
     auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(end-begin);
-    std::cout<<"\nTotal time of execution: " << elapsed.count() << " micro seconds\n\n" << std::endl;
+    std::cout<<"\nTotal time of execution: " << elapsed.count()*1e-6<< " seconds\n\n" << std::endl;
 
     return 0;
 }
