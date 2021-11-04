@@ -6,7 +6,7 @@ int main(){
     //Start execution timer
     auto begin = std::chrono::high_resolution_clock::now();
 
-    std::ifstream sudokufile ("InputSudokus/benchmarkstring.txt");
+    std::ifstream sudokufile ("InputSudokus/SudokuListSlack.txt");
     std::string sudokustring;
     int totalNrGuesses = 0;
 

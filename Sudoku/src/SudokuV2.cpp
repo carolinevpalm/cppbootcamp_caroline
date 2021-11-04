@@ -249,13 +249,14 @@ std::pair<int, int> getMinPossible(Cell (&sudoku)[9][9]){
     int min =10; //Start at 10 since maxiumum is 9 possibilities
     int rowmin = 0;
     int colmin = 0;
+    bool breakloop = false;
 	for (int row = 0; row < 9; row++){
 		for (int col = 0; col < 9; col++){
             //If possible solutions is less than previous but more than 0 --> save index in array
 			if ((sudoku[row][col].poss.size() < min) && (sudoku[row][col].poss.size()>0)){ 
                 min = sudoku[row][col].poss.size();
 				rowmin = row;
-                colmin = col;
+                colmin = col;                
 			}
         }
     }
